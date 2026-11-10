@@ -1,11 +1,17 @@
-const CACHE = "shell-v2";
+const CACHE = "shell-v3";
+
+function appUrl(path) {
+  const base = new URL(self.registration.scope);
+  return new URL(path.replace(/^\//, ""), base).href;
+}
+
 const SHELL = [
-  "/",
-  "/manifest.webmanifest",
-  "/favicon.svg",
-  "/apple-touch-icon.png",
-  "/pwa/icon-192.png",
-  "/pwa/icon-512.png",
+  appUrl(""),
+  appUrl("manifest.webmanifest"),
+  appUrl("favicon.svg"),
+  appUrl("apple-touch-icon.png"),
+  appUrl("pwa/icon-192.png"),
+  appUrl("pwa/icon-512.png"),
 ];
 
 self.addEventListener("install", (event) => {
@@ -14,10 +20,12 @@ self.addEventListener("install", (event) => {
       .open(CACHE)
       .then(async (cache) => {
         await Promise.all(SHELL.map((url) => cache.add(url).catch(() => undefined)));
-        const html = await fetch("/index.html")
+        const html = await fetch(appUrl("index.html"))
           .then((response) => (response.ok ? response.text() : ""))
           .catch(() => "");
-        const assets = [...html.matchAll(/(?:src|href)=["'](\/assets\/[^"']+)["']/g)].map((match) => match[1]);
+        const assets = [...html.matchAll(/(?:src|href)=["']([^"']*\/assets\/[^"']+)["']/g)].map((match) =>
+          new URL(match[1], self.registration.scope).href,
+        );
         await Promise.all(assets.map((url) => cache.add(url).catch(() => undefined)));
       })
       .then(() => self.skipWaiting()),
@@ -52,10 +60,10 @@ async function networkFirst(request) {
   const cache = await caches.open(CACHE);
   try {
     const response = await fetch(request);
-    if (response.ok) await cache.put(new Request("/"), response.clone());
+    if (response.ok) await cache.put(appUrl(""), response.clone());
     return response;
   } catch {
-    return (await cache.match("/")) ?? offlineResponse();
+    return (await cache.match(appUrl(""))) ?? offlineResponse();
   }
 }
 

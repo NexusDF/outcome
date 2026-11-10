@@ -1,36 +1,36 @@
 {
-  "id": "/",
+  "id": "./",
   "name": "Листок",
   "short_name": "Листок",
   "description": "Доходы, расходы и баланс за месяц",
   "lang": "ru",
-  "start_url": "/",
-  "scope": "/",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#f6f6f4",
   "theme_color": "#1B4332",
   "categories": ["finance"],
   "icons": [
     {
-      "src": "/pwa/icon-192.png",
+      "src": "pwa/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/pwa/icon-512.png",
+      "src": "pwa/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/pwa/icon-192.png",
+      "src": "pwa/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "/pwa/icon-512.png",
+      "src": "pwa/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
