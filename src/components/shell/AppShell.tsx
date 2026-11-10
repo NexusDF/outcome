@@ -1,13 +1,10 @@
-import { signOut } from "firebase/auth";
 import { useCallback, useEffect, useState } from "react";
-import type { LedgerClient } from "../../data/client";
 import { createLedger } from "../../data/createLedger";
 import { currentMonth, formatDay, formatMonth, greeting, shiftMonth, todayIso } from "../../domain/dates";
 import { limitTone, overLimitCategories } from "../../domain/limits";
 import { balanceChange, monthBalance, spentByCategory, topExpenseCategories } from "../../domain/transactions";
 import { formatMoney, formatPercent, formatSignedMoney } from "../../domain/money";
 import { emptyFilters, type LedgerSnapshot, type Transaction, type TransactionFilters, type TransactionType } from "../../domain/types";
-import { getFirebase, isFirebaseConfigured } from "../../lib/firebase";
 import { readableError } from "../../lib/errors";
 import { applyTheme } from "../../lib/theme";
 import { Button } from "../ui/Button";
@@ -24,8 +21,8 @@ type Editor = {
   transaction: Transaction | null;
 };
 
-export function AppShell({ uid }: { uid: string | null }) {
-  const [client] = useState(() => createLedger(new Date().toISOString(), uid));
+export function AppShell() {
+  const [client] = useState(() => createLedger(new Date().toISOString()));
   const [snapshot, setSnapshot] = useState<LedgerSnapshot | null>(null);
   const [screen, setScreen] = useState<AppScreen>("home");
   const [hidden, setHidden] = useState(false);
@@ -156,9 +153,6 @@ export function AppShell({ uid }: { uid: string | null }) {
             setFocusSearch(true);
             setScreen("operations");
           }}
-          notice={
-            client.mode === "memory" ? "После обновления страницы операции исчезнут." : null
-          }
         />
       ) : null}
       {screen === "analytics" ? (
@@ -192,11 +186,6 @@ export function AppShell({ uid }: { uid: string | null }) {
           scrollTo={profileAnchor}
           onScrolled={clearProfileAnchor}
           onError={setError}
-          onSignOut={
-            isFirebaseConfigured() && uid
-              ? () => signOut(getFirebase().auth)
-              : null
-          }
         />
       ) : null}
       {error ? (
@@ -239,5 +228,3 @@ export function AppShell({ uid }: { uid: string | null }) {
     </div>
   );
 }
-
-export type { LedgerClient };

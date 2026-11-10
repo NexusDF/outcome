@@ -29,7 +29,6 @@ type HomeScreenProps = {
   onOpen: (id: string) => void;
   onSeeAll: () => void;
   onSearch: () => void;
-  notice?: string | null;
 };
 
 export function HomeScreen({
@@ -50,7 +49,6 @@ export function HomeScreen({
   onOpen,
   onSeeAll,
   onSearch,
-  notice,
 }: HomeScreenProps) {
   return (
     <main className="px-5 pt-6 pb-28">
@@ -66,9 +64,6 @@ export function HomeScreen({
           <SearchIcon className="size-[18px]" />
         </Button>
       </header>
-      {notice ? (
-        <p className="mt-4 rounded-2xl bg-[#F8F1DE] px-4 py-3 text-sm leading-5 text-[#6B5420]">{notice}</p>
-      ) : null}
       {warning ? (
         <p className="mt-4 rounded-2xl bg-[#F8E8EA] px-4 py-3 text-sm text-[#9F3B45]">{warning}</p>
       ) : null}

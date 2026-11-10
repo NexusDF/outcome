@@ -11,7 +11,6 @@ export type DeleteCategoryResult =
   | { ok: false; reason: "not-found" | "has-transactions" | "invalid-target" };
 
 export type LedgerClient = {
-  mode: "memory" | "firebase";
   whenReady: () => Promise<void>;
   subscribe: (listener: (snapshot: LedgerSnapshot) => void) => () => void;
   catchUp: (today: string, now: string) => Promise<number>;

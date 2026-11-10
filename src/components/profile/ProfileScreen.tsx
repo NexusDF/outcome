@@ -46,7 +46,6 @@ type ProfileScreenProps = {
   scrollTo?: "recurring" | null;
   onScrolled?: () => void;
   onError: (message: string | null) => void;
-  onSignOut: (() => Promise<void>) | null;
 };
 
 export function ProfileScreen({
@@ -55,7 +54,6 @@ export function ProfileScreen({
   scrollTo = null,
   onScrolled,
   onError,
-  onSignOut,
 }: ProfileScreenProps) {
   const now = () => new Date().toISOString();
   const [categoryDraft, setCategoryDraft] = useState<Category | null | "new">(null);
@@ -332,17 +330,6 @@ export function ProfileScreen({
           })}
         </ul>
       </section>
-
-      {client.mode === "memory" ? (
-        <p className="mt-4 rounded-2xl bg-[#F8F1DE] px-4 py-3 text-sm leading-5 text-[#6B5420]">
-          После обновления страницы операции исчезнут.
-        </p>
-      ) : null}
-      {onSignOut ? (
-        <Button variant="secondary" className="mt-4 w-full" onPress={() => void onSignOut()}>
-          Выйти
-        </Button>
-      ) : null}
 
       {categoryDraft ? (
         <CategoryModal
