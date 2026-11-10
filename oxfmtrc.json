@@ -1,0 +1,8 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "sortTailwindcss": {
+    "stylesheet": "./src/app.css",
+    "functions": ["clsx", "cn", "cva", "twMerge"]
+  },
+  "semi": false
+}
