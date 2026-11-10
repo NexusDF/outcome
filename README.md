@@ -27,4 +27,6 @@ npm run build
 
 Пока `.env` пустой, приложение работает в памяти вкладки: после обновления страницы операции исчезнут.
 
+Пуш в `main` публикует сборку на Firebase Hosting. Pull request из этого репозитория получает preview-ссылку. В секретах репозитория нужны `FIREBASE_SERVICE_ACCOUNT` и переменные из `.env.example` с теми же именами. Сервисному аккаунту выдайте Firebase Hosting Admin, Firebase Authentication Admin и Service Usage API Keys Viewer.
+
 Данные пользователя лежат в `users/{uid}`: категории, операции, повторяющиеся платежи, отметки вхождений и настройки.
