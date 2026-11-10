@@ -53,7 +53,7 @@ export function AppShell({ uid }: { uid: string | null }) {
 
   if (!snapshot) {
     return (
-      <div className="mx-auto flex min-h-dvh w-full max-w-[390px] items-center justify-center text-sm text-muted">
+      <div className="mx-auto flex min-h-dvh w-full max-w-[390px] items-center justify-center px-5 pt-[env(safe-area-inset-top)] text-sm text-muted">
         Загрузка…
       </div>
     );
@@ -123,7 +123,7 @@ export function AppShell({ uid }: { uid: string | null }) {
   }
 
   return (
-    <div className="mx-auto min-h-dvh w-full max-w-[390px] bg-canvas text-ink">
+    <div className="mx-auto min-h-dvh w-full max-w-[390px] bg-canvas pt-[env(safe-area-inset-top)] text-ink">
       {screen === "home" ? (
         <HomeScreen
           greeting={greeting()}

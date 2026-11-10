@@ -38,9 +38,9 @@ export function AuthScreen() {
   }
 
   return (
-    <div className="mx-auto flex min-h-dvh w-full max-w-[390px] flex-col justify-center bg-canvas px-5">
+    <div className="mx-auto flex min-h-dvh w-full max-w-[390px] flex-col justify-center bg-canvas px-5 pt-[max(1.25rem,env(safe-area-inset-top))] pb-[max(1.25rem,env(safe-area-inset-bottom))]">
       <section className="rounded-[28px] bg-[#1B4332] px-5 py-8 text-white">
-        <h1 className="text-[28px] leading-none font-extrabold">Учёт расходов</h1>
+        <h1 className="text-[28px] leading-none font-extrabold">Листок</h1>
         <p className="mt-3 text-sm text-white/75">Войдите, чтобы хранить операции в Firebase.</p>
       </section>
       <div className="mt-6 flex flex-col gap-4">

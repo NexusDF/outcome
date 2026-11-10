@@ -11,7 +11,7 @@ export default function App() {
   }
   if (auth.status === "loading") {
     return (
-      <div className="mx-auto flex min-h-dvh w-full max-w-[390px] items-center justify-center text-sm text-muted">
+      <div className="mx-auto flex min-h-dvh w-full max-w-[390px] items-center justify-center px-5 pt-[env(safe-area-inset-top)] text-sm text-muted">
         Загрузка…
       </div>
     );
