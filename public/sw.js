@@ -1,4 +1,4 @@
-const CACHE = "shell-v3";
+const CACHE = "shell-v4";
 
 function appUrl(path) {
   const base = new URL(self.registration.scope);
@@ -7,6 +7,7 @@ function appUrl(path) {
 
 const SHELL = [
   appUrl(""),
+  appUrl("index.html"),
   appUrl("manifest.webmanifest"),
   appUrl("favicon.svg"),
   appUrl("apple-touch-icon.png"),
@@ -21,10 +22,10 @@ self.addEventListener("install", (event) => {
       .then(async (cache) => {
         await Promise.all(SHELL.map((url) => cache.add(url).catch(() => undefined)));
         const html = await fetch(appUrl("index.html"))
-          .then((response) => (response.ok ? response.text() : ""))
+          .then((response) => (response.ok && !response.redirected ? response.text() : ""))
           .catch(() => "");
-        const assets = [...html.matchAll(/(?:src|href)=["']([^"']*\/assets\/[^"']+)["']/g)].map((match) =>
-          new URL(match[1], self.registration.scope).href,
+        const assets = [...html.matchAll(/(?:src|href)=["']([^"']*\/assets\/[^"']+)["']/g)].map(
+          (match) => new URL(match[1], self.registration.scope).href,
         );
         await Promise.all(assets.map((url) => cache.add(url).catch(() => undefined)));
       })
@@ -56,14 +57,30 @@ self.addEventListener("fetch", (event) => {
   event.respondWith(staleWhileRevalidate(request));
 });
 
+async function store(cache, url, response) {
+  if (!response.ok || response.redirected || response.type !== "basic") return;
+  try {
+    await cache.put(url, response.clone());
+  } catch {
+    // The Cache API rejects redirects and navigation requests.
+  }
+}
+
 async function networkFirst(request) {
   const cache = await caches.open(CACHE);
   try {
     const response = await fetch(request);
-    if (response.ok) await cache.put(appUrl(""), response.clone());
+    await store(cache, request.url, response);
+    await store(cache, appUrl("index.html"), response);
+    await store(cache, appUrl(""), response);
     return response;
   } catch {
-    return (await cache.match(appUrl(""))) ?? offlineResponse();
+    return (
+      (await cache.match(request)) ??
+      (await cache.match(appUrl("index.html"))) ??
+      (await cache.match(appUrl(""))) ??
+      offlineResponse()
+    );
   }
 }
 
@@ -71,8 +88,8 @@ async function staleWhileRevalidate(request) {
   const cache = await caches.open(CACHE);
   const cached = await cache.match(request);
   const fetched = fetch(request)
-    .then((response) => {
-      if (response.ok && response.type === "basic") void cache.put(request, response.clone());
+    .then(async (response) => {
+      await store(cache, request.url, response);
       return response;
     })
     .catch(() => undefined);
