@@ -1,32 +1,30 @@
-# React + TypeScript + Vite
+# Учёт расходов
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Личный учёт доходов и расходов. Интерфейс на русском, суммы в рублях. В базе суммы хранятся целыми копейками.
 
-Currently, two official plugins are available:
+## Экраны
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Главная** — баланс месяца, доходы и расходы, топ категорий, лимиты и последние операции.
+- **Аналитика** — расходы по категориям, столбцы и линия за 12 месяцев.
+- **Операции** — фильтры, сортировка и экспорт CSV с разделителем «;».
+- **Профиль** — тема, категории, повторяющиеся платежи и месячные лимиты.
 
-## React Compiler
+Повтор сам создаёт пропущенные операции до сегодняшнего дня и не дублирует уже созданные. Категорию с операциями можно удалить только после переноса.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Команды
 
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```bash
+npm install
+npm run dev
+npm test
+npm run lint
+npm run build
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## Firebase
+
+Скопируйте `.env.example` в `.env` и вставьте ключи веб-приложения Firebase. В консоли включите вход по email и Google, создайте Firestore и опубликуйте правила из `firestore.rules`.
+
+Пока `.env` пустой, приложение работает в памяти вкладки: после обновления страницы операции исчезнут.
+
+Данные пользователя лежат в `users/{uid}`: категории, операции, повторяющиеся платежи, отметки вхождений и настройки.
